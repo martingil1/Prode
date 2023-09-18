@@ -1,9 +1,13 @@
 package com.example.prode.services;
 
 import com.example.prode.daos.ResultDao;
+import com.example.prode.daos.TourneyDao;
 import com.example.prode.exceptions.FechaIsNotChargeException;
 import com.example.prode.models.Result;
+import com.example.prode.models.Tourney;
 import com.example.prode.repositories.ResultDto;
+import com.example.prode.repositories.TourneyDto;
+import com.example.prode.responses.ChargeResultResponse;
 import com.example.prode.responses.ResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,17 +21,30 @@ public class ResultServiceImpl implements ResultService {
     @Autowired
     ResultDto resultDto;
 
+    @Autowired
+    TourneyDto tourneyDto;
+
     @Override
-    public void chargeResult(List<ResultDao> resultadosDao) {
+    public ChargeResultResponse chargeResult(TourneyDao tourneyDao) {
 
         List<Result> results = new ArrayList<>();
 
-        for(ResultDao resultDao : resultadosDao){
-            results.add(Result.mapToResultado(resultDao));
+        ChargeResultResponse response = new ChargeResultResponse();
+
+        Tourney tourney = Tourney.mapToTourney(tourneyDao);
+        tourneyDto.save(tourney);
+
+        for(ResultDao resultDao : tourneyDao.getResults()){
+            results.add(Result.mapToResult(resultDao));
+            resultDto.save(Result.mapToResult(resultDao));
         }
 
         results.forEach(System.out::println);
 
+        response.setTourney(tourney.toString());
+        response.setResults(results);
+
+        return response;
     }
 
     @Override
@@ -46,7 +63,7 @@ public class ResultServiceImpl implements ResultService {
         Integer sum = calculateResult(user, fecha);
         ResultResponse aux = new ResultResponse();
         aux.setNombre(user);
-        aux.setSumaResultado(sum);
+        aux.setSumResult(sum);
 
         return aux;
     }

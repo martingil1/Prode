@@ -6,15 +6,15 @@ import lombok.Data;
 @Data
 public class ResultDao {
 
-    @JsonProperty("name")
+    @JsonProperty("nombre")
     String name;
-    @JsonProperty("local_team")
+    @JsonProperty("equipo_local")
     String localTeam;
-    @JsonProperty("visiting_team")
+    @JsonProperty("equipo_visitante")
     String visitingTeam;
-    @JsonProperty("gol_local_team")
+    @JsonProperty("gol_equipo_local")
     Integer golLocalTeam;
-    @JsonProperty("gol_visiting_team")
+    @JsonProperty("gol_equipo_visitante")
     Integer golVisitingTeam;
 
 }

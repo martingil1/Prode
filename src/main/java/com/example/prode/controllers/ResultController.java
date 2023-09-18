@@ -1,6 +1,8 @@
 package com.example.prode.controllers;
 
 import com.example.prode.daos.ResultDao;
+import com.example.prode.daos.TourneyDao;
+import com.example.prode.responses.ChargeResultResponse;
 import com.example.prode.responses.ResultResponse;
 import com.example.prode.models.Result;
 import com.example.prode.services.ResultService;
@@ -27,10 +29,10 @@ public class ResultController {
     @PostMapping(value = "/cargar-resultado",
             consumes = { MediaType.APPLICATION_JSON_VALUE},
             produces = { MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<String> chargeResult(@RequestBody List<ResultDao> resultDao){
+    public ResponseEntity<ChargeResultResponse> chargeResult(@RequestBody TourneyDao tourneyDao){
 
-        resultService.chargeResult(resultDao);
-        return new ResponseEntity<>("Cargado", HttpStatus.CREATED);
+        ChargeResultResponse response = resultService.chargeResult(tourneyDao);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     /*@GetMapping(value = "/obtener-resultado/{nombre}",  produces = { MediaType.APPLICATION_JSON_VALUE})

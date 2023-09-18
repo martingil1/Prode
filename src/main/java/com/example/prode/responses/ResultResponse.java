@@ -1,21 +1,32 @@
 package com.example.prode.responses;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ResultResponse {
 
-    public String nombre;
 
-    public Integer sumaResultado;
+    @JsonProperty("torneo")
+    public String tourney;
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    @JsonProperty("fecha")
+    public String fecha;
+
+    @JsonProperty("nombre")
+    public String name;
+
+    @JsonProperty("suma_total")
+    public Integer sumResult;
+
+    public void setNombre(String name) {
+        this.name = name;
     }
 
-    public void setSumaResultado(Integer sumaResultado) {
-        this.sumaResultado = sumaResultado;
+    public void setSumResult(Integer sumResult) {
+        this.sumResult = sumResult;
     }
 
-    @Override
-    public String toString() {
-        return "Nombre =" + nombre +  " resultado: "+ sumaResultado;
+    public void setTourney(String tourney) {
+        this.tourney = tourney;
     }
+
 }

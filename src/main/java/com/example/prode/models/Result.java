@@ -3,6 +3,8 @@ package com.example.prode.models;
 import com.example.prode.daos.ResultDao;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -19,6 +21,7 @@ import lombok.NoArgsConstructor;
 public class Result {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     @Column(name = "name")
     private String name;
@@ -32,7 +35,7 @@ public class Result {
     @Column(name = "gol_visiting_team")
     private Integer golVisitingTeam;
 
-    public static Result mapToResultado(ResultDao resultDao){
+    public static Result mapToResult(ResultDao resultDao){
 
         return Result.builder()
                 .name(resultDao.getName())
