@@ -2,8 +2,7 @@ package com.example.prode.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ResultResponse {
-
+public class SumResultResponse {
 
     @JsonProperty("torneo")
     public String tourney;

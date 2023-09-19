@@ -6,8 +6,6 @@ import lombok.Data;
 @Data
 public class ResultDao {
 
-    @JsonProperty("nombre")
-    String name;
     @JsonProperty("equipo_local")
     String localTeam;
     @JsonProperty("equipo_visitante")

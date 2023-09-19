@@ -1,9 +1,8 @@
 package com.example.prode.controllers;
 
-import com.example.prode.daos.ResultDao;
-import com.example.prode.daos.TourneyDao;
+import com.example.prode.daos.ChargeResultsDao;
 import com.example.prode.responses.ChargeResultResponse;
-import com.example.prode.responses.ResultResponse;
+import com.example.prode.responses.SumResultResponse;
 import com.example.prode.models.Result;
 import com.example.prode.services.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,35 +28,23 @@ public class ResultController {
     @PostMapping(value = "/cargar-resultado",
             consumes = { MediaType.APPLICATION_JSON_VALUE},
             produces = { MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ChargeResultResponse> chargeResult(@RequestBody TourneyDao tourneyDao){
+    public ResponseEntity<ChargeResultResponse> chargeResult(@RequestBody ChargeResultsDao chargeResultsDao){
 
-        ChargeResultResponse response = resultService.chargeResult(tourneyDao);
+        ChargeResultResponse response = resultService.chargeResult(chargeResultsDao);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    /*@GetMapping(value = "/obtener-resultado/{nombre}",  produces = { MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ResultadoResponse> getResult(@PathVariable String nombre){
+    @GetMapping(value = "/mostrar-resultado/{nameUser}/{tourney}/{year}/{fecha}",  produces = { MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<SumResultResponse> getResultByDB(@PathVariable String nameUser,
+                                                           @PathVariable String tourney,
+                                                           @PathVariable String year,
+                                                           @PathVariable Integer fecha){
 
-
-        Integer suma = resultService.calcularResultado(nombre);
-        //System.out.println("Jugador: "+nombre +" Puntos: " + suma);
-
-        ResultadoResponse aux = new ResultadoResponse();
-        aux.setNombre(nombre);
-        aux.setSumaResultado(suma);
-
-        return ResponseEntity.ok(aux);
-    }*/
-
-    @GetMapping(value = "/mostrar-resultado/{nombre}/{fecha}",  produces = { MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ResultResponse> getResultByDB(@PathVariable String nombre,
-                                                        @PathVariable String fecha){
-
-        return ResponseEntity.ok(resultService.getResultByUser(nombre, fecha));
+        return ResponseEntity.ok(resultService.getResultByUser(nameUser, tourney, year, fecha));
 
     }
 
-    @GetMapping(value = "/mostrar-resultado",  produces = { MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "/mostrar-resultados",  produces = { MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<Result>> getResultByDB(){
 
         return ResponseEntity.ok(resultService.getResultByFecha());
