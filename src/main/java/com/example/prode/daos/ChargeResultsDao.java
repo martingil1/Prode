@@ -6,14 +6,16 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class TourneyDao {
+public class ChargeResultsDao {
 
     @JsonProperty("nombre_torneo")
-    String name;
+    String nameTourney;
     @JsonProperty("año")
     Long year;
     @JsonProperty()
     Integer fecha;
+    @JsonProperty("nombre_usuario")
+    String nameUser;
     @JsonProperty("resultados")
     List<ResultDao> results;
 }

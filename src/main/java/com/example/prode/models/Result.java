@@ -23,12 +23,9 @@ public class Result {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name")
-    private String name;
     @Column(name = "local_team")
     private String localTeam;
     @Column(name = "visiting_team")
-
     private String visitingTeam;
     @Column(name = "gol_local_team")
     private Integer golLocalTeam;
@@ -38,7 +35,6 @@ public class Result {
     public static Result mapToResult(ResultDao resultDao){
 
         return Result.builder()
-                .name(resultDao.getName())
                 .localTeam(resultDao.getLocalTeam())
                 .visitingTeam(resultDao.getVisitingTeam())
                 .golLocalTeam(resultDao.getGolLocalTeam())
@@ -49,7 +45,6 @@ public class Result {
     @Override
     public String toString() {
         return "Resultados: " +
-                " nombre= " + name +
                 " equipo Local= " + localTeam +
                 " equipo Visitante= " + visitingTeam +
                 " gol Equipo Local= " + golLocalTeam +

@@ -1,19 +1,22 @@
 package com.example.prode.services;
 
 import com.example.prode.daos.ResultDao;
-import com.example.prode.daos.TourneyDao;
-import com.example.prode.exceptions.FechaIsNotChargeException;
+import com.example.prode.daos.ChargeResultsDao;
+import com.example.prode.exceptions.TourneyNotExistException;
 import com.example.prode.models.Result;
-import com.example.prode.models.Tourney;
 import com.example.prode.repositories.ResultDto;
+import com.example.prode.repositories.ScoreDto;
 import com.example.prode.repositories.TourneyDto;
+import com.example.prode.repositories.UserDto;
 import com.example.prode.responses.ChargeResultResponse;
 import com.example.prode.responses.ResultResponse;
+import com.example.prode.responses.SumResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ResultServiceImpl implements ResultService {
@@ -24,25 +27,38 @@ public class ResultServiceImpl implements ResultService {
     @Autowired
     TourneyDto tourneyDto;
 
-    @Override
-    public ChargeResultResponse chargeResult(TourneyDao tourneyDao) {
+    @Autowired
+    UserDto userDto;
 
-        List<Result> results = new ArrayList<>();
+    @Autowired
+    ScoreDto scoreDto;
+
+    @Autowired
+    ScoreService scoreService;
+
+   @Override
+    public ChargeResultResponse chargeResult(ChargeResultsDao chargeResultsDao) {
 
         ChargeResultResponse response = new ChargeResultResponse();
+       List<Result> results = new ArrayList<>();
 
-        Tourney tourney = Tourney.mapToTourney(tourneyDao);
-        tourneyDto.save(tourney);
+       if(!tourneyDto.existsTourneyByNameAndYearTourney(chargeResultsDao.getNameTourney(), chargeResultsDao.getYear()))
+           throw new TourneyNotExistException();
 
-        for(ResultDao resultDao : tourneyDao.getResults()){
-            results.add(Result.mapToResult(resultDao));
-            resultDto.save(Result.mapToResult(resultDao));
+      /* if(!userDto.existsByNameUser(chargeResultsDao.getNameUser()))
+           throw new UserIsNotExistException();*/
+
+        for(ResultDao resultDao : chargeResultsDao.getResults()){
+            results.add(resultDto.save(Result.mapToResult(resultDao)));
         }
 
-        results.forEach(System.out::println);
-
-        response.setTourney(tourney.toString());
-        response.setResults(results);
+        scoreService.saveScore(chargeResultsDao, results);
+        response.setTourney(chargeResultsDao.getNameTourney());
+        response.setNameUser(chargeResultsDao.getNameUser());
+        response.setFecha(chargeResultsDao.getFecha());
+        response.setResults(results.stream()
+                .map(ResultResponse::mapFromResult)
+                .collect(Collectors.toList()));
 
         return response;
     }
@@ -58,20 +74,20 @@ public class ResultServiceImpl implements ResultService {
     }
 
     @Override
-    public ResultResponse getResultByUser(String user, String fecha) {
+    public SumResultResponse getResultByUser(String user, String tourney, String year, Integer fecha) {
 
-        Integer sum = calculateResult(user, fecha);
-        ResultResponse aux = new ResultResponse();
+        Integer sum = calculateResult(user, tourney, year, fecha);
+        SumResultResponse aux = new SumResultResponse();
         aux.setNombre(user);
         aux.setSumResult(sum);
 
         return aux;
     }
 
-    private Integer calculateResult(String user, String fecha) {
+    private Integer calculateResult(String user, String tourney, String year, Integer fecha) {
 
-        List<Result> results = resultDto.getResultByrUser(user);
-        List<Result> fechas = resultDto.getResultByrUser(fecha);
+     /*   List<Result> results = resultDto.getResultByNameUser(user, tourney, year, fecha);
+        List<Result> fechas = resultDto.getResultByNameUser(user, tourney, year, fecha);
 
         if(fechas.isEmpty()) throw new FechaIsNotChargeException();
 
@@ -92,7 +108,7 @@ public class ResultServiceImpl implements ResultService {
             }else{
                 sum += 0;
             }
-        }
-        return sum;
+        }*/
+        return 0;
     }
 }
