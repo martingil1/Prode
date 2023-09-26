@@ -6,9 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+
 @Repository
 public interface ResultDto extends CrudRepository<Result, Long> {
 
-   // List<Result> getResultByNameUser(String nameUser, String tourney, String year, Integer fecha);
+    List<Result> getResultsById(Long id);
 
 }

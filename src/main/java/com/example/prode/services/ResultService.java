@@ -11,6 +11,6 @@ public interface ResultService {
 
     ChargeResultResponse chargeResult(ChargeResultsDao chargeResultsDao);
     List<Result> getResultByFecha();
-    SumResultResponse getResultByUser(String user, String tourney, String year, Integer fecha);
+    SumResultResponse getResultByUser(ChargeResultsDao chargeResultsDao);
 
 }

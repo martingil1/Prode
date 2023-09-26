@@ -37,10 +37,10 @@ public class ResultController {
     @GetMapping(value = "/mostrar-resultado/{nameUser}/{tourney}/{year}/{fecha}",  produces = { MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<SumResultResponse> getResultByDB(@PathVariable String nameUser,
                                                            @PathVariable String tourney,
-                                                           @PathVariable String year,
+                                                           @PathVariable Long year,
                                                            @PathVariable Integer fecha){
 
-        return ResponseEntity.ok(resultService.getResultByUser(nameUser, tourney, year, fecha));
+        return ResponseEntity.ok(resultService.getResultByUser(new ChargeResultsDao(tourney, year, fecha, nameUser)));
 
     }
 

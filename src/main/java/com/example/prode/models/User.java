@@ -10,17 +10,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "user_prode")
+@Table(name = "USER_PRODE")
 public class User {
 
     @Id
@@ -37,7 +36,13 @@ public class User {
     })
     private Tourney tourney;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Result> results;
+    public static User createUser(String nameUserParam, Tourney tourneyParam){
+
+        return User.builder()
+                .nameUser(nameUserParam)
+                .tourney(tourneyParam)
+                .build();
+
+    }
 
 }
