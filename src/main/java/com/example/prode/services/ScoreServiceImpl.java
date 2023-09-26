@@ -34,6 +34,10 @@ public class ScoreServiceImpl implements ScoreService{
                                 chargeResultsDao.getYear()).orElseThrow(FechaIsNotChargeException::new))
                 .user(userDto.getUserByNameUser(chargeResultsDao.getNameUser()))
                 .results(results)
+                .sumPartialFecha(0L)
+                .sumTotalFecha(0L)
+                .sumPartialTourney(0L)
+                .sumTotalTourney(0L)
                 .build());
     }
 }
