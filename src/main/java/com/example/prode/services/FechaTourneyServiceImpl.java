@@ -1,13 +1,13 @@
 package com.example.prode.services;
 
-import com.example.prode.daos.ChargeResultsFechaDao;
-import com.example.prode.daos.ResultDao;
+import com.example.prode.dtos.ChargeResultsFechaDto;
+import com.example.prode.dtos.ResultDto;
 import com.example.prode.exceptions.TourneyNotExistException;
 import com.example.prode.models.FechaTourney;
 import com.example.prode.models.Result;
 import com.example.prode.models.Tourney;
-import com.example.prode.repositories.FechaTourneyDto;
-import com.example.prode.repositories.TourneyDto;
+import com.example.prode.repositories.FechaTourneyRepository;
+import com.example.prode.repositories.TourneyRepository;
 import com.example.prode.responses.ChargeResultResponse;
 import com.example.prode.responses.ResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,30 +21,30 @@ import java.util.stream.Collectors;
 public class FechaTourneyServiceImpl implements FechaTourneyService{
 
     @Autowired
-    FechaTourneyDto fechaTourneyDto;
+    FechaTourneyRepository fechaTourneyRepository;
     @Autowired
-    TourneyDto tourneyDto;
+    TourneyRepository tourneyRepository;
 
     @Override
-    public ChargeResultResponse chargeResultFecha(ChargeResultsFechaDao chargeResultsFechaDao) {
+    public ChargeResultResponse chargeResultFecha(ChargeResultsFechaDto chargeResultsFechaDto) {
 
         List<Result> results = new ArrayList<>();
         ChargeResultResponse response = new ChargeResultResponse();
 
-        if(!tourneyDto.existsTourneyByNameAndYearTourney(chargeResultsFechaDao.getNameTourney(), chargeResultsFechaDao.getYear()))
+        if(!tourneyRepository.existsTourneyByNameAndYearTourney(chargeResultsFechaDto.getNameTourney(), chargeResultsFechaDto.getYear()))
             throw new TourneyNotExistException();
 
         Tourney tourney =
-                tourneyDto.getTourneyByNameAndYearTourney(chargeResultsFechaDao.getNameTourney(), chargeResultsFechaDao.getYear());
+                tourneyRepository.getTourneyByNameAndYearTourney(chargeResultsFechaDto.getNameTourney(), chargeResultsFechaDto.getYear());
 
-        for(ResultDao resultDao : chargeResultsFechaDao.getResults()){
-            results.add(Result.mapToResult(resultDao));
+        for(ResultDto resultDto : chargeResultsFechaDto.getResults()){
+            results.add(Result.mapToResult(resultDto));
         }
 
-        fechaTourneyDto.save(FechaTourney.mapToFechaTourney(chargeResultsFechaDao, tourney, results));
+        fechaTourneyRepository.save(FechaTourney.mapToFechaTourney(chargeResultsFechaDto, tourney, results));
 
-        response.setTourney(chargeResultsFechaDao.getNameTourney());
-        response.setFecha(chargeResultsFechaDao.getFecha());
+        response.setTourney(chargeResultsFechaDto.getNameTourney());
+        response.setFecha(chargeResultsFechaDto.getFecha());
         response.setResults(results.stream()
                         .map(ResultResponse::mapFromResult)
                         .collect(Collectors.toList()));

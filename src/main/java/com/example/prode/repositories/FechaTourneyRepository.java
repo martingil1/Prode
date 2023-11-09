@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface FechaTourneyDto extends CrudRepository<FechaTourney, Long> {
+public interface FechaTourneyRepository extends CrudRepository<FechaTourney, Long> {
 
     @Query("SELECT FT FROM FechaTourney FT " +
             "INNER JOIN Tourney T ON FT.tourney.name = T.name AND FT.tourney.yearTourney = T.yearTourney " +

@@ -1,6 +1,6 @@
 package com.example.prode.models;
 
-import com.example.prode.daos.ChargeResultsFechaDao;
+import com.example.prode.dtos.ChargeResultsFechaDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,7 +42,7 @@ public class FechaTourney {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Result> results;
 
-    public static FechaTourney mapToFechaTourney(ChargeResultsFechaDao resultDao,
+    public static FechaTourney mapToFechaTourney(ChargeResultsFechaDto resultDao,
                                                  Tourney tourney,
                                                  List<Result> results){
 

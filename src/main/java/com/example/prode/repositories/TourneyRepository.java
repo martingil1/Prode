@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TourneyDto extends CrudRepository<Tourney, String> {
+public interface TourneyRepository extends CrudRepository<Tourney, String> {
 
     Boolean existsTourneyByNameAndYearTourney(String name, Long yearTourney);
 

@@ -1,6 +1,6 @@
 package com.example.prode.controllers;
 
-import com.example.prode.daos.TourneyDao;
+import com.example.prode.dtos.TourneyDto;
 import com.example.prode.responses.TourneyResponse;
 import com.example.prode.services.TourneyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +22,9 @@ public class TourneyController {
     @PostMapping(value = "/cargar-torneo",
             consumes = { MediaType.APPLICATION_JSON_VALUE},
             produces = { MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<TourneyResponse> chargeTourney(@RequestBody TourneyDao tourneyDao){
+    public ResponseEntity<TourneyResponse> chargeTourney(@RequestBody TourneyDto tourneyDto){
 
-        TourneyResponse response = tourneyService.chargeTourney(tourneyDao);
+        TourneyResponse response = tourneyService.chargeTourney(tourneyDto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

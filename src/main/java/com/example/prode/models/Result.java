@@ -1,6 +1,6 @@
 package com.example.prode.models;
 
-import com.example.prode.daos.ResultDao;
+import com.example.prode.dtos.ResultDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,13 +32,13 @@ public class Result {
     @Column(name = "gol_visiting_team")
     private Integer golVisitingTeam;
 
-    public static Result mapToResult(ResultDao resultDao){
+    public static Result mapToResult(ResultDto resultDto){
 
         return Result.builder()
-                .localTeam(resultDao.getLocalTeam())
-                .visitingTeam(resultDao.getVisitingTeam())
-                .golLocalTeam(resultDao.getGolLocalTeam())
-                .golVisitingTeam(resultDao.getGolVisitingTeam())
+                .localTeam(resultDto.getLocalTeam())
+                .visitingTeam(resultDto.getVisitingTeam())
+                .golLocalTeam(resultDto.getGolLocalTeam())
+                .golVisitingTeam(resultDto.getGolVisitingTeam())
                 .build();
     }
 

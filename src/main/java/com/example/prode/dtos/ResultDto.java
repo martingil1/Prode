@@ -1,10 +1,10 @@
-package com.example.prode.daos;
+package com.example.prode.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class ResultDao {
+public class ResultDto {
 
     @JsonProperty("equipo_local")
     String localTeam;

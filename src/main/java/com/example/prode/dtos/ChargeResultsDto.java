@@ -1,4 +1,4 @@
-package com.example.prode.daos;
+package com.example.prode.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class ChargeResultsDao {
+public class ChargeResultsDto {
 
     @JsonProperty("nombre_torneo")
     String nameTourney;
@@ -19,9 +19,9 @@ public class ChargeResultsDao {
     @JsonProperty("nombre_usuario")
     String nameUser;
     @JsonProperty("resultados")
-    List<ResultDao> results;
+    List<ResultDto> results;
 
-    public ChargeResultsDao(String nameTourney, Long year, Integer fecha, String nameUser) {
+    public ChargeResultsDto(String nameTourney, Long year, Integer fecha, String nameUser) {
         this.nameTourney = nameTourney;
         this.year = year;
         this.fecha = fecha;

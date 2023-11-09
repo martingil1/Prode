@@ -1,4 +1,4 @@
-package com.example.prode.daos;
+package com.example.prode.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ChargeResultsFechaDao {
+public class ChargeResultsFechaDto {
 
     @JsonProperty("nombre_torneo")
     String nameTourney;
@@ -15,6 +15,6 @@ public class ChargeResultsFechaDao {
     @JsonProperty()
     Integer fecha;
     @JsonProperty("resultados")
-    List<ResultDao> results;
+    List<ResultDto> results;
 
 }

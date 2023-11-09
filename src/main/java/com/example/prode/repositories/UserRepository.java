@@ -2,12 +2,11 @@ package com.example.prode.repositories;
 
 import com.example.prode.models.Tourney;
 import com.example.prode.models.User;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserDto extends CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<User, Long> {
 
     Boolean existsByNameUser(String nameUser);
 

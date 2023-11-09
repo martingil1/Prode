@@ -1,6 +1,6 @@
 package com.example.prode.controllers;
 
-import com.example.prode.daos.ChargeResultsDao;
+import com.example.prode.dtos.ChargeResultsDto;
 import com.example.prode.responses.ChargeResultResponse;
 import com.example.prode.responses.SumResultResponse;
 import com.example.prode.models.Result;
@@ -28,9 +28,9 @@ public class ResultController {
     @PostMapping(value = "/cargar-resultado",
             consumes = { MediaType.APPLICATION_JSON_VALUE},
             produces = { MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ChargeResultResponse> chargeResult(@RequestBody ChargeResultsDao chargeResultsDao){
+    public ResponseEntity<ChargeResultResponse> chargeResult(@RequestBody ChargeResultsDto chargeResultsDto){
 
-        ChargeResultResponse response = resultService.chargeResult(chargeResultsDao);
+        ChargeResultResponse response = resultService.chargeResult(chargeResultsDto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -40,7 +40,7 @@ public class ResultController {
                                                            @PathVariable Long year,
                                                            @PathVariable Integer fecha){
 
-        return ResponseEntity.ok(resultService.getResultByUser(new ChargeResultsDao(tourney, year, fecha, nameUser)));
+        return ResponseEntity.ok(resultService.getResultByUser(new ChargeResultsDto(tourney, year, fecha, nameUser)));
 
     }
 

@@ -1,15 +1,15 @@
 package com.example.prode.services;
 
-import com.example.prode.daos.ResultDao;
-import com.example.prode.daos.ChargeResultsDao;
+import com.example.prode.dtos.ResultDto;
+import com.example.prode.dtos.ChargeResultsDto;
 import com.example.prode.exceptions.TourneyNotExistException;
 import com.example.prode.models.Result;
 import com.example.prode.models.Tourney;
 import com.example.prode.models.User;
-import com.example.prode.repositories.ResultDto;
-import com.example.prode.repositories.ScoreDto;
-import com.example.prode.repositories.TourneyDto;
-import com.example.prode.repositories.UserDto;
+import com.example.prode.repositories.ResultRepository;
+import com.example.prode.repositories.ScoreRepository;
+import com.example.prode.repositories.TourneyRepository;
+import com.example.prode.repositories.UserRepository;
 import com.example.prode.responses.ChargeResultResponse;
 import com.example.prode.responses.SumResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,48 +22,48 @@ import java.util.List;
 public class ResultServiceImpl implements ResultService {
 
     @Autowired
-    ResultDto resultDto;
+    ResultRepository resultRepository;
 
     @Autowired
-    TourneyDto tourneyDto;
+    TourneyRepository tourneyRepository;
 
     @Autowired
-    UserDto userDto;
+    UserRepository userRepository;
 
     @Autowired
-    ScoreDto scoreDto;
+    ScoreRepository scoreRepository;
 
     @Autowired
     ScoreService scoreService;
 
    @Override
-    public ChargeResultResponse chargeResult(ChargeResultsDao chargeResultsDao) {
+    public ChargeResultResponse chargeResult(ChargeResultsDto chargeResultsDto) {
 
        List<Result> results = new ArrayList<>();
 
-       if(!tourneyDto.existsTourneyByNameAndYearTourney(chargeResultsDao.getNameTourney(), chargeResultsDao.getYear()))
+       if(!tourneyRepository.existsTourneyByNameAndYearTourney(chargeResultsDto.getNameTourney(), chargeResultsDto.getYear()))
            throw new TourneyNotExistException();
 
-       Tourney tourney = tourneyDto.getTourneyByNameAndYearTourney(chargeResultsDao.getNameTourney(),
-               chargeResultsDao.getYear());
+       Tourney tourney = tourneyRepository.getTourneyByNameAndYearTourney(chargeResultsDto.getNameTourney(),
+               chargeResultsDto.getYear());
 
-       if(!userDto.existsByNameUserAndTourney(chargeResultsDao.getNameUser(),tourney)){
-          userDto.save(User.createUser(chargeResultsDao.getNameUser(),tourney));
+       if(!userRepository.existsByNameUserAndTourney(chargeResultsDto.getNameUser(),tourney)){
+          userRepository.save(User.createUser(chargeResultsDto.getNameUser(),tourney));
        }
 
-       for(ResultDao resultDao : chargeResultsDao.getResults()){
-         results.add(resultDto.save(Result.mapToResult(resultDao)));
+       for(ResultDto resultDto : chargeResultsDto.getResults()){
+         results.add(resultRepository.save(Result.mapToResult(resultDto)));
        }
 
-       scoreService.saveScore(chargeResultsDao, results);
+       scoreService.saveScore(chargeResultsDto, results);
 
-       return ChargeResultResponse.fromResult(chargeResultsDao, results);
+       return ChargeResultResponse.fromResult(chargeResultsDto, results);
     }
 
     @Override
     public List<Result> getResultByFecha() {
 
-        List<Result> results = (List<Result>) resultDto.findAll();
+        List<Result> results = (List<Result>) resultRepository.findAll();
 
         results.forEach(System.out::println);
 
@@ -71,17 +71,17 @@ public class ResultServiceImpl implements ResultService {
     }
 
     @Override
-    public SumResultResponse getResultByUser(ChargeResultsDao chargeResultsDao) {
+    public SumResultResponse getResultByUser(ChargeResultsDto chargeResultsDto) {
 
-        Integer sum = calculateResult(chargeResultsDao);
+        Integer sum = calculateResult(chargeResultsDto);
         SumResultResponse aux = new SumResultResponse();
-        aux.setNombre(chargeResultsDao.getNameUser());
+        aux.setNombre(chargeResultsDto.getNameUser());
         aux.setSumResult(sum);
 
         return aux;
     }
 
-    private Integer calculateResult(ChargeResultsDao chargeResultsDao) {
+    private Integer calculateResult(ChargeResultsDto chargeResultsDto) {
 
         /*
 

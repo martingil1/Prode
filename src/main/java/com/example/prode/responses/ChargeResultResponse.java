@@ -1,6 +1,6 @@
 package com.example.prode.responses;
 
-import com.example.prode.daos.ChargeResultsDao;
+import com.example.prode.dtos.ChargeResultsDto;
 import com.example.prode.models.Result;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -26,12 +26,12 @@ public class ChargeResultResponse {
     @JsonProperty("resultados")
     public List<ResultResponse> results;
 
-    public static ChargeResultResponse fromResult(ChargeResultsDao chargeResultsDao, List<Result> results){
+    public static ChargeResultResponse fromResult(ChargeResultsDto chargeResultsDto, List<Result> results){
 
         return ChargeResultResponse.builder()
-                .tourney(chargeResultsDao.getNameTourney())
-                .fecha(chargeResultsDao.getFecha())
-                .nameUser(chargeResultsDao.getNameUser())
+                .tourney(chargeResultsDto.getNameTourney())
+                .fecha(chargeResultsDto.getFecha())
+                .nameUser(chargeResultsDto.getNameUser())
                 .results(results.stream()
                         .map(ResultResponse::mapFromResult)
                         .collect(Collectors.toList()))
