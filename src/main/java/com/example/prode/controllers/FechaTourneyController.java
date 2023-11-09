@@ -1,6 +1,6 @@
 package com.example.prode.controllers;
 
-import com.example.prode.daos.ChargeResultsFechaDao;
+import com.example.prode.dtos.ChargeResultsFechaDto;
 import com.example.prode.responses.ChargeResultResponse;
 import com.example.prode.services.FechaTourneyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +21,9 @@ public class FechaTourneyController {
     @PostMapping(value = "/cargar-fecha",
             consumes = { MediaType.APPLICATION_JSON_VALUE},
             produces = { MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ChargeResultResponse> chargeFecha(@RequestBody ChargeResultsFechaDao chargeResultsFechaDao){
+    public ResponseEntity<ChargeResultResponse> chargeFecha(@RequestBody ChargeResultsFechaDto chargeResultsFechaDto){
 
-        return ResponseEntity.ok(fechaTourneyService.chargeResultFecha(chargeResultsFechaDao));
+        return ResponseEntity.ok(fechaTourneyService.chargeResultFecha(chargeResultsFechaDto));
 
     }
 

@@ -1,8 +1,8 @@
 package com.example.prode.services;
 
-import com.example.prode.daos.TourneyDao;
+import com.example.prode.dtos.TourneyDto;
 import com.example.prode.models.Tourney;
-import com.example.prode.repositories.TourneyDto;
+import com.example.prode.repositories.TourneyRepository;
 import com.example.prode.responses.TourneyResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 public class TourneyServiceImpl implements TourneyService{
 
     @Autowired
-    TourneyDto tourneyDto;
+    TourneyRepository tourneyRepository;
     @Override
-    public TourneyResponse chargeTourney(TourneyDao tourneyDao) {
+    public TourneyResponse chargeTourney(TourneyDto tourneyDto) {
 
-        return TourneyResponse.fromTourney(tourneyDto.save(Tourney.fromTourneyDao(tourneyDao)));
+        return TourneyResponse.fromTourney(tourneyRepository.save(Tourney.fromTourneyDao(tourneyDto)));
     }
 }

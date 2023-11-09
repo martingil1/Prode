@@ -1,12 +1,12 @@
 package com.example.prode.services;
 
-import com.example.prode.daos.ChargeResultsDao;
+import com.example.prode.dtos.ChargeResultsDto;
 import com.example.prode.exceptions.FechaIsNotChargeException;
 import com.example.prode.models.Result;
 import com.example.prode.models.Score;
-import com.example.prode.repositories.FechaTourneyDto;
-import com.example.prode.repositories.ScoreDto;
-import com.example.prode.repositories.UserDto;
+import com.example.prode.repositories.FechaTourneyRepository;
+import com.example.prode.repositories.ScoreRepository;
+import com.example.prode.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,23 +16,23 @@ import java.util.List;
 public class ScoreServiceImpl implements ScoreService{
 
     @Autowired
-    UserDto userDto;
+    UserRepository userRepository;
 
     @Autowired
-    FechaTourneyDto fechaTourneyDto;
+    FechaTourneyRepository fechaTourneyRepository;
 
     @Autowired
-    ScoreDto scoreDto;
+    ScoreRepository scoreRepository;
 
     @Override
-    public void saveScore(ChargeResultsDao chargeResultsDao, List<Result> results) {
+    public void saveScore(ChargeResultsDto chargeResultsDto, List<Result> results) {
 
-        scoreDto.save(Score.builder()
-                .fechaTourney(fechaTourneyDto.getFechaTourneyByFechaAndTourney(
-                                chargeResultsDao.getFecha(),
-                                chargeResultsDao.getNameTourney(),
-                                chargeResultsDao.getYear()).orElseThrow(FechaIsNotChargeException::new))
-                .user(userDto.getUserByNameUser(chargeResultsDao.getNameUser()))
+        scoreRepository.save(Score.builder()
+                .fechaTourney(fechaTourneyRepository.getFechaTourneyByFechaAndTourney(
+                                chargeResultsDto.getFecha(),
+                                chargeResultsDto.getNameTourney(),
+                                chargeResultsDto.getYear()).orElseThrow(FechaIsNotChargeException::new))
+                .user(userRepository.getUserByNameUser(chargeResultsDto.getNameUser()))
                 .results(results)
                 .sumPartialFecha(0L)
                 .sumTotalFecha(0L)

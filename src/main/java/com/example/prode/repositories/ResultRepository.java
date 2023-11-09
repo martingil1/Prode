@@ -8,7 +8,7 @@ import java.util.List;
 
 
 @Repository
-public interface ResultDto extends CrudRepository<Result, Long> {
+public interface ResultRepository extends CrudRepository<Result, Long> {
 
     List<Result> getResultsById(Long id);
 

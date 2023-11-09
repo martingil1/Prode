@@ -1,7 +1,7 @@
 package com.example.prode.models;
 
-import com.example.prode.daos.ChargeResultsDao;
-import com.example.prode.daos.TourneyDao;
+import com.example.prode.dtos.ChargeResultsDto;
+import com.example.prode.dtos.TourneyDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -29,19 +29,19 @@ public class Tourney{
     @Column(name = "year_tourney")
     private Long yearTourney;
 
-    public static Tourney mapToTourney(ChargeResultsDao chargeResultsDao){
+    public static Tourney mapToTourney(ChargeResultsDto chargeResultsDto){
 
         return Tourney.builder()
-                .name(chargeResultsDao.getNameUser())
-                .yearTourney(chargeResultsDao.getYear())
+                .name(chargeResultsDto.getNameUser())
+                .yearTourney(chargeResultsDto.getYear())
                 .build();
     }
 
-    public static Tourney fromTourneyDao(TourneyDao tourneyDao){
+    public static Tourney fromTourneyDao(TourneyDto tourneyDto){
 
         return Tourney.builder()
-                .name(tourneyDao.getName())
-                .yearTourney(tourneyDao.getYear())
+                .name(tourneyDto.getName())
+                .yearTourney(tourneyDto.getYear())
                 .build();
 
     }
