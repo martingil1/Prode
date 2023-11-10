@@ -8,7 +8,7 @@ public class SumResultResponse {
     public String tourney;
 
     @JsonProperty("fecha")
-    public String fecha;
+    public Integer fecha;
 
     @JsonProperty("nombre")
     public String name;
@@ -28,4 +28,7 @@ public class SumResultResponse {
         this.tourney = tourney;
     }
 
+    public void setFecha(Integer fecha) {
+        this.fecha = fecha;
+    }
 }
