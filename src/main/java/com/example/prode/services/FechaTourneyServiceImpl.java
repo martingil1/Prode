@@ -31,11 +31,10 @@ public class FechaTourneyServiceImpl implements FechaTourneyService{
         List<Result> results = new ArrayList<>();
         ChargeResultResponse response = new ChargeResultResponse();
 
-        if(!tourneyRepository.existsTourneyByNameAndYearTourney(chargeResultsFechaDto.getNameTourney(), chargeResultsFechaDto.getYear()))
-            throw new TourneyNotExistException();
-
         Tourney tourney =
-                tourneyRepository.getTourneyByNameAndYearTourney(chargeResultsFechaDto.getNameTourney(), chargeResultsFechaDto.getYear());
+                tourneyRepository.getTourneyByNameAndYearTourney(
+                        chargeResultsFechaDto.getNameTourney(), chargeResultsFechaDto.getYear())
+                        .orElseThrow(TourneyNotExistException::new);
 
         for(ResultDto resultDto : chargeResultsFechaDto.getResults()){
             results.add(Result.mapToResult(resultDto));

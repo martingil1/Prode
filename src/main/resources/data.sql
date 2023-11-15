@@ -1,7 +1,7 @@
 INSERT INTO TOURNEY (name,year_tourney)
 VALUES ('LPF', 2021);
 
-INSERT INTO FECHA_TOURNEY (id, fecha, FK_TOURNEY_NAME, FK_TOURNEY_YEAR)
+INSERT INTO FECHA_TOURNEY (id_fecha_tourney, fecha, tourney_name, tourney_year)
 VALUES(10, 2, 'LPF', 2021);
 
 INSERT INTO RESULT (id, local_team, visiting_team, gol_local_team, gol_visiting_team)

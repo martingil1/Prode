@@ -47,11 +47,8 @@ public class ResultServiceImpl implements ResultService {
 
        List<Result> results = new ArrayList<>();
 
-       if(!tourneyRepository.existsTourneyByNameAndYearTourney(chargeResultsDto.getNameTourney(), chargeResultsDto.getYear()))
-           throw new TourneyNotExistException();
-
        Tourney tourney = tourneyRepository.getTourneyByNameAndYearTourney(chargeResultsDto.getNameTourney(),
-               chargeResultsDto.getYear());
+               chargeResultsDto.getYear()).orElseThrow(TourneyNotExistException::new);
 
        if(!userRepository.existsByNameUserAndTourney(chargeResultsDto.getNameUser(),tourney)){
           userRepository.save(User.createUser(chargeResultsDto.getNameUser(),tourney));
