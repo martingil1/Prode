@@ -30,13 +30,14 @@ public class FechaTourney {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "id_fecha_tourney")
     private Long id;
     @Column()
     private Integer fecha;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumns({
-            @JoinColumn(name = "FK_TOURNEY_NAME", referencedColumnName = "name"),
-            @JoinColumn(name = "FK_TOURNEY_YEAR", referencedColumnName = "year_tourney")
+            @JoinColumn(name = "tourney_name", referencedColumnName = "name"),
+            @JoinColumn(name = "tourney_year", referencedColumnName = "year_tourney")
     })
     private Tourney tourney;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
