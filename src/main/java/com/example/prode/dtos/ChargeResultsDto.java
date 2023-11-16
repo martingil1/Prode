@@ -27,4 +27,10 @@ public class ChargeResultsDto {
         this.fecha = fecha;
         this.nameUser = nameUser;
     }
+
+    public ChargeResultsDto(String nameTourney, Long year, String nameUser) {
+        this.nameTourney = nameTourney;
+        this.year = year;
+        this.nameUser = nameUser;
+    }
 }

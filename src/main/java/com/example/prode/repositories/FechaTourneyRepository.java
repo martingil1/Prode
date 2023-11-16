@@ -23,4 +23,9 @@ public interface FechaTourneyRepository extends CrudRepository<FechaTourney, Lon
             " AND FT.tourney.yearTourney = :year AND FT.fecha = :fecha")
     Optional<List<Result>> getResultsByTourneyAndFecha(String tourney, Long year, Integer fecha);
 
+    @Query("SELECT FT.fecha FROM FechaTourney FT " +
+            "INNER JOIN Tourney T ON FT.tourney.name = T.name AND FT.tourney.yearTourney = T.yearTourney " +
+            "WHERE FT.tourney.name = :nameTourney AND FT.tourney.yearTourney = :year")
+    List<Integer> getCantOfFechasByTourney(String nameTourney, Long year);
+
 }
