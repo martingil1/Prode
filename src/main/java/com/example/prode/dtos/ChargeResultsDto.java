@@ -33,4 +33,15 @@ public class ChargeResultsDto {
         this.year = year;
         this.nameUser = nameUser;
     }
+
+    public ChargeResultsDto(String nameTourney, Long year, Integer fecha) {
+        this.nameTourney = nameTourney;
+        this.year = year;
+        this.fecha = fecha;
+    }
+
+    public ChargeResultsDto(String nameTourney, Long year) {
+        this.nameTourney = nameTourney;
+        this.year = year;
+    }
 }

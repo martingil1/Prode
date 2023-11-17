@@ -2,6 +2,7 @@ package com.example.prode.services;
 
 import com.example.prode.dtos.ChargeResultsDto;
 import com.example.prode.models.Result;
+import com.example.prode.responses.PositionsResponse;
 import com.example.prode.responses.SumResultResponse;
 
 import java.util.List;
@@ -14,6 +15,8 @@ public interface ScoreService {
 
     SumResultResponse showScorePartialByTourneyAndUser(ChargeResultsDto chargeResultsDto);
 
-    //calcular posiciones
+    PositionsResponse showPositionsByFecha(ChargeResultsDto chargeResultsDto);
+
+    PositionsResponse showPositionsByTourney(ChargeResultsDto chargeResultsDto);
 
 }

@@ -1,6 +1,7 @@
 package com.example.prode.controllers;
 
 import com.example.prode.dtos.ChargeResultsDto;
+import com.example.prode.responses.PositionsResponse;
 import com.example.prode.responses.SumResultResponse;
 import com.example.prode.services.ScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,24 @@ public class ScoreController {
 
         return ResponseEntity.ok(scoreService.showScorePartialByTourneyAndUser(
                 new ChargeResultsDto(tourney, year, nameUser)));
+    }
+
+    @GetMapping(value = "/posiciones-fecha/{tourney}/{year}/{fecha}",
+            produces = { MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<PositionsResponse> getPositionsByFecha(@PathVariable String tourney,
+                                                                 @PathVariable Long year,
+                                                                 @PathVariable Integer fecha){
+
+        return ResponseEntity.ok(scoreService.showPositionsByFecha(
+                new ChargeResultsDto(tourney, year, fecha)));
+    }
+
+    @GetMapping(value = "/posiciones-torneo/{tourney}/{year}",
+            produces = { MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<PositionsResponse> getPositionsByFecha(@PathVariable String tourney,
+                                                                 @PathVariable Long year){
+
+        return ResponseEntity.ok(scoreService.showPositionsByTourney(
+                new ChargeResultsDto(tourney, year)));
     }
 }

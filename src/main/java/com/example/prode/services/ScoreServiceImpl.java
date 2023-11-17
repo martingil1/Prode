@@ -8,11 +8,17 @@ import com.example.prode.models.Score;
 import com.example.prode.repositories.FechaTourneyRepository;
 import com.example.prode.repositories.ScoreRepository;
 import com.example.prode.repositories.UserRepository;
+import com.example.prode.responses.PositionsResponse;
 import com.example.prode.responses.SumResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 @Service
 public class ScoreServiceImpl implements ScoreService{
@@ -41,6 +47,75 @@ public class ScoreServiceImpl implements ScoreService{
                 .sumPartialTourney(0L)
                 .sumTotalTourney(0L)
                 .build());
+    }
+
+    @Override
+    public PositionsResponse showPositionsByFecha(ChargeResultsDto chargeResultsDto) {
+
+        Map<String, Integer> positions = new TreeMap<>();
+        SumResultResponse sumResultResponse;
+
+        List<String> users = scoreRepository.getUsersByTourneyAndFecha(
+                chargeResultsDto.getNameTourney(),
+                chargeResultsDto.getYear(),
+                chargeResultsDto.getFecha());
+
+        for(String userName : users){
+            chargeResultsDto.setNameUser(userName);
+            sumResultResponse = showScorePartialByFechaAndUser(chargeResultsDto);
+            positions.put(sumResultResponse.getName(), sumResultResponse.getSumResult());
+        }
+
+        return PositionsResponse.builder()
+                .tourney(chargeResultsDto.getNameTourney())
+                .year(chargeResultsDto.getYear())
+                .fecha(chargeResultsDto.getFecha())
+                .users(positions.entrySet().stream()
+                        .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                        .collect(Collectors.toMap(
+                                Map.Entry::getKey,
+                                Map.Entry::getValue,
+                                (oldValue, newValue) -> newValue,
+                                LinkedHashMap::new
+                        )))
+                .build();
+    }
+
+    @Override
+    public PositionsResponse showPositionsByTourney(ChargeResultsDto chargeResultsDto) {
+
+        Map<String, Integer> positions = new TreeMap<>();
+        SumResultResponse sumResultResponse;
+
+        List<String> users = scoreRepository.getUsersByTourney(
+                chargeResultsDto.getNameTourney(),
+                chargeResultsDto.getYear());
+
+        List<Integer> fechas = fechaTourneyRepository.getCantOfFechasByTourney(
+                chargeResultsDto.getNameTourney(), chargeResultsDto.getYear());
+
+        for (Integer fecha : fechas) {
+
+            for(String userName : users){
+                chargeResultsDto.setFecha(fecha);
+                chargeResultsDto.setNameUser(userName);
+                sumResultResponse = showScorePartialByTourneyAndUser(chargeResultsDto);
+                positions.put(sumResultResponse.getName(), sumResultResponse.getSumResult());
+            }
+
+        }
+        return PositionsResponse.builder()
+                .tourney(chargeResultsDto.getNameTourney())
+                .year(chargeResultsDto.getYear())
+                .users(positions.entrySet().stream()
+                        .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                        .collect(Collectors.toMap(
+                                Map.Entry::getKey,
+                                Map.Entry::getValue,
+                                (oldValue, newValue) -> newValue,
+                                LinkedHashMap::new
+                        )))
+                .build();
     }
 
     @Override
@@ -79,13 +154,6 @@ public class ScoreServiceImpl implements ScoreService{
         aux.setTourney(chargeResultsDto.getNameTourney());
         aux.setYear(chargeResultsDto.getYear());
         aux.setSumResult(sum);
-
-                /*(long) fechas.stream()
-                .peek((fecha) -> {
-                    chargeResultsDto.setFecha(fecha);
-                    calculateResult(chargeResultsDto);
-                }).collect(Collectors.toList()).stream()
-                        .peek((aux) -> aux + aux).*/
 
         return aux;
     }
