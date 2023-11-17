@@ -78,7 +78,7 @@ public class UserPaymentServiceImpl implements UserPaymentService{
         Tourney tourney = tourneyRepository.getTourneyByNameAndYearTourney(nameTourney, tourneyYear)
                 .orElseThrow(TourneyNotExistException::new);
 
-        User user = userRepository.getUserByNameUserAndTourney(userName, tourney)
+        User user = userRepository.getUserByNameUserAndTourney(userName, tourney.getName(), tourney.getYearTourney())
                 .orElseThrow(UserIsNotInTheTourneyException::new);
 
         FechaTourney fechaTourney1 = fechaTourneyRepository.getFechaTourneyByFechaAndTourney(fechaTourney, nameTourney, tourneyYear)

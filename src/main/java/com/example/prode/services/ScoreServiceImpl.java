@@ -2,7 +2,9 @@ package com.example.prode.services;
 
 import com.example.prode.dtos.ChargeResultsDto;
 import com.example.prode.exceptions.FechaIsNotChargeException;
+import com.example.prode.exceptions.ResultsIsNotChargedException;
 import com.example.prode.exceptions.UserIsNotExistException;
+import com.example.prode.exceptions.UserIsNotInTheTourneyException;
 import com.example.prode.models.Result;
 import com.example.prode.models.Score;
 import com.example.prode.repositories.FechaTourneyRepository;
@@ -40,7 +42,9 @@ public class ScoreServiceImpl implements ScoreService{
                                 chargeResultsDto.getFecha(),
                                 chargeResultsDto.getNameTourney(),
                                 chargeResultsDto.getYear()).orElseThrow(FechaIsNotChargeException::new))
-                .user(userRepository.getUserByNameUser(chargeResultsDto.getNameUser()))
+                .user(userRepository.getUserByNameUserAndTourney(chargeResultsDto.getNameUser(),
+                        chargeResultsDto.getNameTourney(),
+                        chargeResultsDto.getYear()).get())
                 .results(results)
                 .sumPartialFecha(0L)
                 .sumTotalFecha(0L)
@@ -171,6 +175,9 @@ public class ScoreServiceImpl implements ScoreService{
                 chargeResultsDto.getFecha()).orElseThrow(FechaIsNotChargeException::new);
 
         Integer sum = 0;
+
+        if(results.isEmpty())
+            throw new ResultsIsNotChargedException(chargeResultsDto.getNameUser(),chargeResultsDto.getFecha());
 
         for(Result r : results){
 

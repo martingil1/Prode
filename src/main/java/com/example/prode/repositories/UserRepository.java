@@ -2,6 +2,7 @@ package com.example.prode.repositories;
 
 import com.example.prode.models.Tourney;
 import com.example.prode.models.User;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,6 +17,8 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     User getUserByNameUser(String nameUser);
 
-    Optional<User> getUserByNameUserAndTourney(String nameUser, Tourney tourney);
+    @Query("SELECT U FROM User U WHERE U.nameUser = :nameUser" +
+            " AND U.tourney.name = :nameTourney AND U.tourney.yearTourney = :yearTourney")
+    Optional<User> getUserByNameUserAndTourney(String nameUser, String nameTourney, Long yearTourney);
 
 }

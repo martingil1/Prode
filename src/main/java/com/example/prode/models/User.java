@@ -32,8 +32,8 @@ public class User {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumns({
-            @JoinColumn(name = "FK_TOURNEY_NAME", referencedColumnName = "name"),
-            @JoinColumn(name = "FK_TOURNEY_YEAR", referencedColumnName = "year_tourney")
+            @JoinColumn(name = "name_tourney", referencedColumnName = "name"),
+            @JoinColumn(name = "year_tourney", referencedColumnName = "year_tourney")
     })
     private Tourney tourney;
 
