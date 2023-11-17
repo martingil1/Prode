@@ -179,6 +179,20 @@ public class ScoreServiceImpl implements ScoreService{
         if(results.isEmpty())
             throw new ResultsIsNotChargedException(chargeResultsDto.getNameUser(),chargeResultsDto.getFecha());
 
+        //Para la posiciones por fecha parcial para que no tire un error de index en el array se hace estas lineas
+        //EJEMPLO: Los resultados por usuario se cargan completos
+        //10 resultados por fecha
+        //Los resultados por fecha se cargan incompletos o completos pero para el calculo parcial incompletos
+        //PEJ: El viernes hubo 2 partidos se cargan 2 resultados
+        //cuando vaya a la linea 198 va a romper en el get
+        //porque cuando results quiera pasarle su indexOF(3) a fechas, fechas no tiene ese indice
+        //con esto lo que hago es que vaya eliminando temporalmente los resultados que no precisa de la fecha.
+        //claramente quedan cargados en la base ya que no tiene relacion este delete con los datos en la DB
+        //Esto es un comentario para dejar en claro que hacen estas lineas, dsp se sacan estos comentarios
+        while(results.size() != fechas.size()){
+            results.remove(fechas.size());
+        }
+
         for(Result r : results){
 
             Result aux = fechas.get(results.indexOf(r));
