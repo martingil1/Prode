@@ -1,12 +1,14 @@
 package com.example.prode.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
+import lombok.Builder;
 import lombok.Setter;
 
+import java.util.Map;
+
+@Builder
 @Setter
-@Getter
-public class SumResultResponse {
+public class PositionsResponse {
 
     @JsonProperty("torneo")
     public String tourney;
@@ -17,10 +19,7 @@ public class SumResultResponse {
     @JsonProperty("fecha")
     public Integer fecha;
 
-    @JsonProperty("nombre")
-    public String name;
-
-    @JsonProperty("suma_total")
-    public Integer sumResult;
+    @JsonProperty("posiciones")
+    public Map<String, Integer> users;
 
 }

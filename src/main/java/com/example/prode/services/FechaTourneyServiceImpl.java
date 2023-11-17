@@ -2,6 +2,7 @@ package com.example.prode.services;
 
 import com.example.prode.dtos.ChargeResultsFechaDto;
 import com.example.prode.dtos.ResultDto;
+import com.example.prode.exceptions.FechasIsAlreadyLoadedException;
 import com.example.prode.exceptions.TourneyNotExistException;
 import com.example.prode.models.FechaTourney;
 import com.example.prode.models.Result;
@@ -25,6 +26,8 @@ public class FechaTourneyServiceImpl implements FechaTourneyService{
     @Autowired
     TourneyRepository tourneyRepository;
 
+    public static final String FECHA = "Fecha ";
+
     @Override
     public ChargeResultResponse chargeResultFecha(ChargeResultsFechaDto chargeResultsFechaDto) {
 
@@ -36,6 +39,9 @@ public class FechaTourneyServiceImpl implements FechaTourneyService{
                         chargeResultsFechaDto.getNameTourney(), chargeResultsFechaDto.getYear())
                         .orElseThrow(TourneyNotExistException::new);
 
+        if(fechaTourneyRepository.existsByFechaAndTourney(chargeResultsFechaDto.getFecha(), tourney))
+            throw new FechasIsAlreadyLoadedException(chargeResultsFechaDto.getFecha());
+
         for(ResultDto resultDto : chargeResultsFechaDto.getResults()){
             results.add(Result.mapToResult(resultDto));
         }
@@ -43,6 +49,7 @@ public class FechaTourneyServiceImpl implements FechaTourneyService{
         fechaTourneyRepository.save(FechaTourney.mapToFechaTourney(chargeResultsFechaDto, tourney, results));
 
         response.setTourney(chargeResultsFechaDto.getNameTourney());
+        response.setNameUser(FECHA + chargeResultsFechaDto.getFecha());
         response.setFecha(chargeResultsFechaDto.getFecha());
         response.setResults(results.stream()
                         .map(ResultResponse::mapFromResult)

@@ -10,7 +10,5 @@ import java.util.List;
 public interface ResultService {
 
     ChargeResultResponse chargeResult(ChargeResultsDto chargeResultsDto);
-    List<Result> getResultByFecha();
-    SumResultResponse getResultByUser(ChargeResultsDto chargeResultsDto);
 
 }
