@@ -4,7 +4,6 @@ import com.example.prode.dtos.ChargeResultsDto;
 import com.example.prode.exceptions.FechaIsNotChargeException;
 import com.example.prode.exceptions.ResultsIsNotChargedException;
 import com.example.prode.exceptions.UserIsNotExistException;
-import com.example.prode.exceptions.UserIsNotInTheTourneyException;
 import com.example.prode.models.Result;
 import com.example.prode.models.Score;
 import com.example.prode.repositories.FechaTourneyRepository;
@@ -19,6 +18,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -179,33 +179,38 @@ public class ScoreServiceImpl implements ScoreService{
         if(results.isEmpty())
             throw new ResultsIsNotChargedException(chargeResultsDto.getNameUser(),chargeResultsDto.getFecha());
 
-        //Para la posiciones por fecha parcial para que no tire un error de index en el array se hace estas lineas
-        //EJEMPLO: Los resultados por usuario se cargan completos
-        //10 resultados por fecha
-        //Los resultados por fecha se cargan incompletos o completos pero para el calculo parcial incompletos
-        //PEJ: El viernes hubo 2 partidos se cargan 2 resultados
-        //cuando vaya a la linea 198 va a romper en el get
-        //porque cuando results quiera pasarle su indexOF(3) a fechas, fechas no tiene ese indice
-        //con esto lo que hago es que vaya eliminando temporalmente los resultados que no precisa de la fecha.
-        //claramente quedan cargados en la base ya que no tiene relacion este delete con los datos en la DB
-        //Esto es un comentario para dejar en claro que hacen estas lineas, dsp se sacan estos comentarios
-        while(results.size() != fechas.size()){
-            results.remove(fechas.size());
-        }
-
         for(Result r : results){
 
             Result aux = fechas.get(results.indexOf(r));
+            if(Objects.isNull(aux.getGolLocalTeam())){
+                break;
+            }
+            //Resultado pleno
+            //Ejemplo resultado fecha 2-0, resultado usuario 2 a 0)
             if(aux.getGolLocalTeam().equals(r.getGolLocalTeam())
                     && aux.getGolVisitingTeam().equals(r.getGolVisitingTeam())){
                 sum +=3;
+            //Si el equipo local gana pero sin pegarle al resultado correcto
+            //Ejemplo resultado fecha 2-1, resultado usuario 2 a 0)
             }else if(aux.getGolLocalTeam() > aux.getGolVisitingTeam()
                     && r.getGolLocalTeam() > r.getGolVisitingTeam()){
                 sum += 2;
-            }else if(aux.getGolLocalTeam().equals(aux.getGolVisitingTeam())
+            }
+            //Si el equipo visitante gana pero sin pegarle al resultado correcto
+            //Ejemplo resultado fecha 2-3, resultado usuario 0 a 1)
+            else if(aux.getGolLocalTeam() < aux.getGolVisitingTeam()
+                    && r.getGolLocalTeam() < r.getGolVisitingTeam()){
+                sum += 2;
+            }
+            //Si hay empate pero sin pegarle al resultado correcto
+            //Ejemplo resultado fecha 1-1, resultado usuario 0 a 0)
+            else if(aux.getGolLocalTeam().equals(aux.getGolVisitingTeam())
                     && r.getGolLocalTeam().equals(r.getGolVisitingTeam())){
                 sum += 2;
-            }else{
+            }
+            //Si no le pega al resultado ni al equipo ganador ni al empate
+            //Ejemplo resultado fecha 1-0, resultado usuario 0 a 0)
+            else{
                 sum += 0;
             }
         }
