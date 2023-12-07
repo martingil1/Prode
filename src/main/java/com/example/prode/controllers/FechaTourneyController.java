@@ -2,10 +2,13 @@ package com.example.prode.controllers;
 
 import com.example.prode.dtos.ChargeResultsFechaDto;
 import com.example.prode.responses.ChargeResultResponse;
+import com.example.prode.responses.PositionsResponse;
 import com.example.prode.services.FechaTourneyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +37,17 @@ public class FechaTourneyController {
 
         return ResponseEntity.ok(fechaTourneyService.chargeResultFecha(chargeResultsFechaDto));
 
+    }
+
+    @GetMapping(value = "/eliminar-fecha/{tourney}/{year}/{fecha}",
+            produces = { MediaType.APPLICATION_JSON_VALUE})
+
+        public ResponseEntity<String> deleteFechaTourney(@PathVariable String tourney,
+                                                                       @PathVariable Long year,
+                                                                       @PathVariable Integer fecha){
+
+        fechaTourneyService.deleteFechaTourney(fecha,tourney,year);
+        return ResponseEntity.ok("Fecha eliminada");
     }
 
 }

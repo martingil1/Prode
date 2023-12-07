@@ -9,4 +9,6 @@ public interface FechaTourneyService {
 
     ChargeResultResponse chargeFechaEmpty(ChargeResultsFechaDto chargeResultsFechaDto);
 
+    void deleteFechaTourney(Integer fecha, String tourney, Long year);
+
 }

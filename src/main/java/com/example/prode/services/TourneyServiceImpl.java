@@ -1,6 +1,7 @@
 package com.example.prode.services;
 
 import com.example.prode.dtos.TourneyDto;
+import com.example.prode.exceptions.TourneyNotExistException;
 import com.example.prode.models.Tourney;
 import com.example.prode.repositories.TourneyRepository;
 import com.example.prode.responses.TourneyResponse;
@@ -16,5 +17,14 @@ public class TourneyServiceImpl implements TourneyService{
     public TourneyResponse chargeTourney(TourneyDto tourneyDto) {
 
         return TourneyResponse.fromTourney(tourneyRepository.save(Tourney.fromTourneyDao(tourneyDto)));
+    }
+
+    @Override
+    public void deleteTourney(String nameTourney, Long year) {
+
+        Tourney tourney = tourneyRepository.getTourneyByNameAndYearTourney(nameTourney,year)
+                .orElseThrow(TourneyNotExistException::new);
+
+        tourneyRepository.delete(tourney);
     }
 }
