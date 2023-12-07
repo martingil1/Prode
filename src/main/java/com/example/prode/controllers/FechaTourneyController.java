@@ -18,10 +18,19 @@ public class FechaTourneyController {
     @Autowired
     FechaTourneyService fechaTourneyService;
 
-    @PostMapping(value = "/cargar-fecha",
+    @PostMapping(value = "/cargar-fecha-vacia",
             consumes = { MediaType.APPLICATION_JSON_VALUE},
             produces = { MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ChargeResultResponse> chargeFecha(@RequestBody ChargeResultsFechaDto chargeResultsFechaDto){
+
+        return ResponseEntity.ok(fechaTourneyService.chargeFechaEmpty(chargeResultsFechaDto));
+
+    }
+
+    @PostMapping(value = "/cargar-fecha-resultados",
+            consumes = { MediaType.APPLICATION_JSON_VALUE},
+            produces = { MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<ChargeResultResponse> chargeFechaWithResults(@RequestBody ChargeResultsFechaDto chargeResultsFechaDto){
 
         return ResponseEntity.ok(fechaTourneyService.chargeResultFecha(chargeResultsFechaDto));
 

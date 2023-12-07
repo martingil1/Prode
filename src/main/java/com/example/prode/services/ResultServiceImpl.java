@@ -1,7 +1,7 @@
 package com.example.prode.services;
 
-import com.example.prode.dtos.ResultDto;
 import com.example.prode.dtos.ChargeResultsDto;
+import com.example.prode.dtos.ResultDto;
 import com.example.prode.exceptions.TourneyNotExistException;
 import com.example.prode.models.Result;
 import com.example.prode.models.Tourney;

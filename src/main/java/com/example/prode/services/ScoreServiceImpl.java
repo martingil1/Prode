@@ -2,6 +2,7 @@ package com.example.prode.services;
 
 import com.example.prode.dtos.ChargeResultsDto;
 import com.example.prode.exceptions.FechaIsNotChargeException;
+import com.example.prode.exceptions.ResultsIsNotChargedException;
 import com.example.prode.exceptions.UserIsNotExistException;
 import com.example.prode.models.Result;
 import com.example.prode.models.Score;
@@ -17,6 +18,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -40,7 +42,9 @@ public class ScoreServiceImpl implements ScoreService{
                                 chargeResultsDto.getFecha(),
                                 chargeResultsDto.getNameTourney(),
                                 chargeResultsDto.getYear()).orElseThrow(FechaIsNotChargeException::new))
-                .user(userRepository.getUserByNameUser(chargeResultsDto.getNameUser()))
+                .user(userRepository.getUserByNameUserAndTourney(chargeResultsDto.getNameUser(),
+                        chargeResultsDto.getNameTourney(),
+                        chargeResultsDto.getYear()).get())
                 .results(results)
                 .sumPartialFecha(0L)
                 .sumTotalFecha(0L)
@@ -172,19 +176,41 @@ public class ScoreServiceImpl implements ScoreService{
 
         Integer sum = 0;
 
+        if(results.isEmpty())
+            throw new ResultsIsNotChargedException(chargeResultsDto.getNameUser(),chargeResultsDto.getFecha());
+
         for(Result r : results){
 
             Result aux = fechas.get(results.indexOf(r));
+            if(Objects.isNull(aux.getGolLocalTeam())){
+                break;
+            }
+            //Resultado pleno
+            //Ejemplo resultado fecha 2-0, resultado usuario 2 a 0)
             if(aux.getGolLocalTeam().equals(r.getGolLocalTeam())
                     && aux.getGolVisitingTeam().equals(r.getGolVisitingTeam())){
                 sum +=3;
+            //Si el equipo local gana pero sin pegarle al resultado correcto
+            //Ejemplo resultado fecha 2-1, resultado usuario 2 a 0)
             }else if(aux.getGolLocalTeam() > aux.getGolVisitingTeam()
                     && r.getGolLocalTeam() > r.getGolVisitingTeam()){
                 sum += 2;
-            }else if(aux.getGolLocalTeam().equals(aux.getGolVisitingTeam())
+            }
+            //Si el equipo visitante gana pero sin pegarle al resultado correcto
+            //Ejemplo resultado fecha 2-3, resultado usuario 0 a 1)
+            else if(aux.getGolLocalTeam() < aux.getGolVisitingTeam()
+                    && r.getGolLocalTeam() < r.getGolVisitingTeam()){
+                sum += 2;
+            }
+            //Si hay empate pero sin pegarle al resultado correcto
+            //Ejemplo resultado fecha 1-1, resultado usuario 0 a 0)
+            else if(aux.getGolLocalTeam().equals(aux.getGolVisitingTeam())
                     && r.getGolLocalTeam().equals(r.getGolVisitingTeam())){
                 sum += 2;
-            }else{
+            }
+            //Si no le pega al resultado ni al equipo ganador ni al empate
+            //Ejemplo resultado fecha 1-0, resultado usuario 0 a 0)
+            else{
                 sum += 0;
             }
         }

@@ -1,6 +1,5 @@
 package com.example.prode.models;
 
-import com.example.prode.dtos.ChargeResultsFechaDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,13 +42,13 @@ public class FechaTourney {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Result> results;
 
-    public static FechaTourney mapToFechaTourney(ChargeResultsFechaDto resultDao,
+    public static FechaTourney mapToFechaTourney(Integer fecha,
                                                  Tourney tourney,
                                                  List<Result> results){
 
         return FechaTourney.builder()
                 .tourney(tourney)
-                .fecha(resultDao.getFecha())
+                .fecha(fecha)
                 .results(results)
                 .build();
     }
