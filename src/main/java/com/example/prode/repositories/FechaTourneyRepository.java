@@ -31,4 +31,6 @@ public interface FechaTourneyRepository extends CrudRepository<FechaTourney, Lon
 
     Boolean existsByFechaAndTourney(Integer fecha, Tourney tourney);
 
+    FechaTourney getFechaTourneysById(Long id);
+
 }

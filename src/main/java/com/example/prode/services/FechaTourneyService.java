@@ -7,4 +7,6 @@ public interface FechaTourneyService {
 
     ChargeResultResponse chargeResultFecha(ChargeResultsFechaDto chargeResultsFechaDto);
 
+    ChargeResultResponse chargeFechaEmpty(ChargeResultsFechaDto chargeResultsFechaDto);
+
 }
