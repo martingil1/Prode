@@ -60,6 +60,15 @@ public class FechaTourneyServiceImpl implements FechaTourneyService{
     }
 
     @Override
+    public void deleteFechaTourney(Integer fecha, String tourney, Long year) {
+
+        FechaTourney fechaTourney = fechaTourneyRepository.getFechaTourneyByFechaAndTourney(fecha, tourney, year)
+                .orElseThrow(FechaIsNotChargeException::new);
+
+        fechaTourneyRepository.delete(fechaTourney);
+    }
+
+    @Override
     public ChargeResultResponse chargeResultFecha(ChargeResultsFechaDto chargeResultsFechaDto) {
 
         List<Result> results = new ArrayList<>();

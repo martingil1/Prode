@@ -7,4 +7,5 @@ public interface TourneyService {
 
     TourneyResponse chargeTourney(TourneyDto tourneyDto);
 
+    void deleteTourney(String tourney, Long year);
 }
